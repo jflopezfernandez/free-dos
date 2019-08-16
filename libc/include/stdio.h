@@ -21,8 +21,12 @@
 #ifndef _STDIO_H
 #define _STDIO_H 1
 
-#include <kernel/cdefs.h>
+#include <sys/cdefs.h>
 
+/** This is the end of file marker returned by C standard library functions such
+ *  as fgetc. It is usually defined as -1 by convention.
+ * 
+ */
 #define EOF (-1)
 
 #ifdef __cplusplus

@@ -32,11 +32,6 @@
 #error "The kernel requires an ix86-elf compiler."
 #endif
 
-/* TODO: Remove this function */
-static void say_hello(void) {
-    write_string_to_terminal("Hello, kernel world!\n");
-}
-
 /** This is the entry point to the kernel. In its current form, the kernel
  *  simply initializes a simple terminal in VGA text mode and prints a simple
  *  'hello world message'.
@@ -46,7 +41,5 @@ void kernel_main(void) {
     /* Initialize the terminal interface */
     initialize_terminal();
 
-    for (size_t i = 0; i < 5; ++i) {
-        say_hello();
-    }
+    write_string_to_terminal("FreeDOS initialized...\n");
 }

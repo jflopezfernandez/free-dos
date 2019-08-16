@@ -23,6 +23,13 @@
 
 #include <stdint.h>
 
+/** This is the address of the VGA text mode buffer into which the terminal can
+ *  begin to write. This address is the location of the beginning of the first
+ *  line on the screen.
+ * 
+ */
+#define VGA_TEXT_MODE_BUFFER (uint16_t *) 0xB8000
+
 /** This enumeration contains the hardware text mode color constants used by
  *  the VGA text mode buffer.
  * 

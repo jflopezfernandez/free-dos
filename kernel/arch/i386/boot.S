@@ -122,8 +122,9 @@ _start:
      *  TODO: Initialize instruction-set extensions
      *  TODO: Load global descriptor table (GDT)
      *  TODO: Enable paging
-     *
-     *  Enter the high-level kernel. The ABI requires the stack to be 16-byte
+     */
+
+    /** Enter the high-level kernel. The ABI requires the stack to be 16-byte
      *  aligned at the time of the call instruction (which afterwards pushes the
      *  return pointer of size 4 bytes). The stack was originally 16-byte
      *  aligned and we've since pushed a multiple of 16 bytes to the stack

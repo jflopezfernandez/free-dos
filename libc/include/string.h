@@ -29,10 +29,24 @@
 extern "C" {
 #endif
 
+/** This is the preprocessor macro definition for the null pointer. It must be
+ *  case to void* to prevent the compiler from emitting type-mismatch errors, as
+ *  well as to actually allow the compiler to catch pointer-as-integer errors
+ *  that would otherwise be manifested as segmentation faults at runtime.
+ * 
+ */
+#define NULL ((void *) 0)
+
+/* TODO: Documentation */
+/* TODO: Implement */
 int memcmp(const void* s1, const void* s2, size_t size);
 
+/* TODO: Documentation */
+/* TODO: Implement */
 void* memcpy(void* __restrict dest, const void* __restrict src, size_t size);
 
+/* TODO: Documentation */
+/* TODO: Implement */
 void* memmove(void* dest, const void* __restrict src, size_t size);
 
 /** This function sets the first n bytes of the specified buffer with a constant

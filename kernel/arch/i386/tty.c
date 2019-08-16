@@ -82,7 +82,7 @@ static uint16_t* terminal_buffer = NULL;
 void initialize_terminal(void) {
     set_terminal_color(VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK);
 
-    terminal_buffer = (uint16_t *) 0xB8000;
+    terminal_buffer = VGA_TEXT_MODE_BUFFER;
 
     for (size_t row = 0; row < VGA_HEIGHT; ++row) {
         for (size_t column = 0; column < VGA_WIDTH; ++column) {
