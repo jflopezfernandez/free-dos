@@ -1,0 +1,9 @@
+#!/bin/sh
+
+set -e
+
+. ./create-boot-disc
+
+qemu-system-$(scripts/target-triplet-to-arch $HOST) -cdrom free-dos.iso
+
+# qemu-system-$(scripts/target-triplet-to-arch i686-elf) -kernel kernel/fdos

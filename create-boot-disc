@@ -1,0 +1,20 @@
+#!/bin/sh
+
+set -e
+
+. ./build
+
+mkdir -p iso/boot/grub
+
+cp sysroot/boot/fdos iso/boot/fdos
+cat > iso/boot/grub/grub.cfg << EOF
+set timeout=10
+set default=0
+
+menuentry "free-dos" {
+    multiboot /boot/fdos
+    boot
+}
+EOF
+
+grub-mkrescue -o free-dos.iso iso

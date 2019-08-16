@@ -1,0 +1,15 @@
+#!/bin/sh
+
+set -e
+
+echo -e "\n\n************************************************************"
+echo -e "\nREMEMBER TO RE-ADD LIBC TO THE LIST OF PROJECTS IN CONFIG FILE"
+echo -e "REMEMBER TO REMOVE STRLEN FROM TTY.C AND TEST LINKING WITH NEW LIBC"
+echo -e "\n************************************************************\n\n"
+
+. ./headers
+
+for PROJECT in $PROJECTS; do
+    (cd $PROJECT && DESTDIR="$SYSROOT" $MAKE install)
+done
+

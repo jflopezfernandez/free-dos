@@ -1,0 +1,15 @@
+#!/bin/sh
+
+# This script is based on the original target-triplet-to-arch script written by
+# Jonas 'Sortie' Termansen for the OS Dev project.
+
+if [[ $# -eq 0 ]]; then
+    echo "Usage: target-triplet-to-arch <Host>"
+    exit 1
+fi
+
+if echo "$1" | grep -Eq 'i[[:digit:]]86-'; then
+    echo i386
+else
+    echo "$1" | grep -Eo '^[[:alnum:]_]*'
+fi
