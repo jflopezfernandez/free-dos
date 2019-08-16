@@ -79,3 +79,4 @@ install-libs: $(BINARIES)
 clean:
 	$(RM) $(BINARIES) *.a
 	$(RM) $(OBJS) $(LIBK_OBJS) *.o */*.o */*/*.o
+	$(RM) $(OBJS:.o=.d) $(LIBK_OBJS:.o=.d) *.d */*.d */*/*.d

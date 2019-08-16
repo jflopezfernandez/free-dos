@@ -76,3 +76,4 @@ install-kernel: $(TARGET)
 clean:
 	$(RM) $(TARGET)
 	$(RM) $(OBJS) *.o */*.o */*/*.o
+	$(RM) $(OBJS:.o=.d) *.d */*.d */*/*.d

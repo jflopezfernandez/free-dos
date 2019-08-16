@@ -1,3 +1,22 @@
+ 
+/** Copyright (C) 2019 Jose Fernando Lopez Fernandez
+ *
+ *  This file is part of the FreeDOS Operating System.
+ *
+ *  The FreeDOS Operating System is free software: you can redistribute
+ *  it and/or modify it under the terms of the GNU General Public License
+ *  as published by the Free Software Foundation, either version 3 of the
+ *  License, or (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ */
 
 #include <stdbool.h>
 #include <stddef.h>
@@ -25,7 +44,7 @@
  *  when terminal scrolling should take place.
  * 
  */
-size_t current_terminal_row = 0;
+static size_t current_terminal_row = 0;
 
 /** This variable keeps track of the current column in the VGA text mode buffer.
  *  It is used for indicating when we've reached the end of the current line and
@@ -33,7 +52,7 @@ size_t current_terminal_row = 0;
  *  a newline character is detected.
  * 
  */
-size_t current_terminal_column = 0;
+static size_t current_terminal_column = 0;
 
 /** This variable contains the color for the current terminal. Technically
  *  speaking, it contains two colors: the foreground color and the background
@@ -41,7 +60,7 @@ size_t current_terminal_column = 0;
  *  variable can then be used as the second input to the vga_entry function.
  * 
  */
-uint8_t terminal_color;
+static uint8_t terminal_color;
 
 /** This is the pointer used to hold the address of the VGA text mode buffer.
  *  The VGA text mode buffer itself is located at 0xB8000, but the VGA
@@ -50,33 +69,39 @@ uint8_t terminal_color;
  *  selecting the desired text buffer.
  * 
  */
-uint16_t* terminal_buffer = NULL;
+static uint16_t* terminal_buffer = NULL;
 
-/* TODO: Documentation */
+/** This function performs basic initialization by initializing the terminal's
+ *  color setting and initializing the terminal_buffer pointer to the location
+ *  of the VGA text mode buffer address.
+ * 
+ *  The terminal is then effectively cleared by painting each cell the same
+ *  color.
+ * 
+ */
 void initialize_terminal(void) {
-    /* Shouldn't this be done using set_terminal color??? */
-    terminal_color = vga_entry_color(VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK);
+    set_terminal_color(VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK);
 
     terminal_buffer = (uint16_t *) 0xB8000;
 
-    for (size_t y = 0; y < VGA_HEIGHT; ++y) {
-        for (size_t x = 0; x < VGA_WIDTH; ++x) {
-            const size_t index = y * VGA_WIDTH + x;
+    for (size_t row = 0; row < VGA_HEIGHT; ++row) {
+        for (size_t column = 0; column < VGA_WIDTH; ++column) {
+            const size_t index = row * VGA_WIDTH + column;
 
             terminal_buffer[index] = vga_entry(' ', terminal_color);
         }
     }
 }
 
-/** TODO: Documentation????????????????????????????????????????????????????????
- * 
- *  TODO: Shouldn't this function handle setting the terminal color in
- *        initialize_terminal? Possible refactor into set_term_color(fg, bg) and
- *        call vga_entry_color to get uint8_t value.
+/** This function sets the current terminal color by taking two color values as
+ *  input, one being the foreground color and one being the background color,
+ *  coalescing them into a single 8-bit value representing a valid VGA text mode
+ *  color value, and finally setting the terminal color by calling
+ *  vga_entry_color.
  * 
  */
-void set_terminal_color(uint8_t color) {
-    terminal_color = color;
+void set_terminal_color(enum vga_color_t foreground_color, enum vga_color_t background_color) {
+    terminal_color = vga_entry_color(foreground_color, background_color);
 }
 
 /* TODO: Documentation */
@@ -103,6 +128,16 @@ void terminal_put_entry_at(char c, uint8_t color, size_t x, size_t y) {
 
 /* TODO: Documentation */
 void terminal_putchar(char c) {
+    /** Handle newline character
+     * 
+     */
+    if (c == '\n') {
+        current_terminal_row += 1;
+        current_terminal_column = 0;
+
+        return;
+    }
+
     terminal_put_entry_at(c, terminal_color, current_terminal_column, current_terminal_row);
 
     if (++current_terminal_column == VGA_WIDTH) {
